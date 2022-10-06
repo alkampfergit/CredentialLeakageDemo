@@ -7,19 +7,21 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var configurationBuilder = new ConfigurationBuilder()
-  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+  .AddSecureJson("appsettings.json", optional: false, reloadOnChange: true);
 
 var overrideFile = ConfigurationHelper.FindOverrideParentConfig("OhMyDemoConfig.json");
 if (overrideFile != null)
 {
     Log.Information("Found configuration file {overrideConfigFile}", overrideFile);
-    configurationBuilder.AddJsonFile(overrideFile, optional:false, reloadOnChange: true);
+    configurationBuilder.AddSecureJson(overrideFile, optional:false, reloadOnChange: true);
 }
 
 IConfiguration Configuration = configurationBuilder.Build();
 
 var secret = Configuration.GetValue<string>("Secret");
+var superSecret = Configuration.GetValue<string>("SuperSecret");
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine($"My secret is: {secret}");
+Console.WriteLine($"My SuperSecret is: {superSecret}");
 Console.ReadKey();
